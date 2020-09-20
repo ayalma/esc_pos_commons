@@ -2,18 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'purchase_response.g.dart';
 
-abstract class PurchaseResponse {
-  final String reserveNumber;
-  final String maskedPan;
-  String bankType;
-
-  PurchaseResponse(this.reserveNumber, this.maskedPan, this.bankType);
-}
+abstract class PurchaseResponse {}
 
 @JsonSerializable()
 class PurchaseCanceled extends PurchaseResponse {
-  PurchaseCanceled(String reserveNumber, String maskedPan, String bankType)
-      : super(reserveNumber, maskedPan, bankType);
+  PurchaseCanceled() : super();
   factory PurchaseCanceled.fromJson(Map<String, dynamic> json) =>
       _$PurchaseCanceledFromJson(json);
   Map<String, dynamic> toJson() => _$PurchaseCanceledToJson(this);
@@ -23,12 +16,10 @@ class PurchaseCanceled extends PurchaseResponse {
 class PurchaseInitFailed extends PurchaseResponse {
   final int status;
   final String statusDescription;
-  final String panHash;
   final String errorDescription;
 
-  PurchaseInitFailed(String reserveNumber, String maskedPan, String bankType,
-      this.status, this.statusDescription, this.panHash, this.errorDescription)
-      : super(reserveNumber, maskedPan, bankType);
+  PurchaseInitFailed(
+      this.status, this.statusDescription, this.errorDescription);
 
   factory PurchaseInitFailed.fromJson(Map<String, dynamic> json) =>
       _$PurchaseInitFailedFromJson(json);
@@ -39,32 +30,11 @@ class PurchaseInitFailed extends PurchaseResponse {
 class PurchaseFailed extends PurchaseResponse {
   final int errorCode;
   final String errorDescription;
-  final String terminalNo;
-  final String merchantId;
-  final String posSerial;
-  final String traceNumber;
-  final String rrn;
-  final String ref;
-  final String amount;
-  final String txnDate;
-  final String txnTime;
 
   PurchaseFailed(
-      String reserveNumber,
-      String maskedPan,
-      String bankType,
-      this.errorCode,
-      this.errorDescription,
-      this.terminalNo,
-      this.merchantId,
-      this.posSerial,
-      this.traceNumber,
-      this.rrn,
-      this.ref,
-      this.amount,
-      this.txnDate,
-      this.txnTime)
-      : super(reserveNumber, maskedPan, bankType);
+    this.errorCode,
+    this.errorDescription,
+  );
 
   factory PurchaseFailed.fromJson(Map<String, dynamic> json) =>
       _$PurchaseFailedFromJson(json);
@@ -74,33 +44,22 @@ class PurchaseFailed extends PurchaseResponse {
 @JsonSerializable()
 class PurchaseSuscces extends PurchaseResponse {
   final String terminalNo;
-  final String merchantId;
-  final String posSerial;
   final String traceNumber;
-  final String rrn;
-  final String ref;
+  final String referenceNo;
   final String amount;
-  final String txnDate;
-  final String txnTime;
+  final String maskedPan;
+  final int pcPosId;
+  final int creditTypeId;
 
   PurchaseSuscces(
-    String reserveNumber,
-    String maskedPan,
-    String bankType,
     this.terminalNo,
-    this.merchantId,
-    this.posSerial,
     this.traceNumber,
-    this.rrn,
-    this.ref,
+    this.referenceNo,
     this.amount,
-    this.txnDate,
-    this.txnTime,
-  ) : super(
-          reserveNumber,
-          maskedPan,
-          bankType,
-        );
+    this.maskedPan, {
+    this.pcPosId,
+    this.creditTypeId,
+  });
 
   factory PurchaseSuscces.fromJson(Map<String, dynamic> json) =>
       _$PurchaseSusccesFromJson(json);
